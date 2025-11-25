@@ -4,8 +4,12 @@ const {
   createStudent,
   getStudents,
   getStudentById,
+  getStudentByUSN,
   updateStudent,
-  deleteStudent
+  deleteStudent,
+  getDashboardStats,
+  getCompanySelections,
+  getStatusDistribution
 } = require( "../controller/student.controller.js");
 
 const router = express.Router();
@@ -15,8 +19,24 @@ const router = express.Router();
 router.post("/", createStudent);
 
 // @route   GET /api/students
-// @desc    Get all students (with filters: sem, branch)
+// @desc    Get all students (with filters: sem, branch, course, name, usn, pagination)
 router.get("/", getStudents);
+
+// @route   GET /api/students/stats
+// @desc    Get dashboard statistics
+router.get("/stats", getDashboardStats);
+
+// @route   GET /api/students/company-selections
+// @desc    Get company-wise selections
+router.get("/company-selections", getCompanySelections);
+
+// @route   GET /api/students/status-distribution
+// @desc    Get status distribution
+router.get("/status-distribution", getStatusDistribution);
+
+// @route   GET /api/students/usn/:usn
+// @desc    Get single student by USN
+router.get("/usn/:usn", getStudentByUSN);
 
 // @route   GET /api/students/:id
 // @desc    Get single student by ID

@@ -41,5 +41,10 @@ const CompanySchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
+// Add indexes for better query performance
+CompanySchema.index({ jobType: 1 });
+CompanySchema.index({ recruitmentDate: 1 });
+CompanySchema.index({ jobType: 1, recruitmentDate: 1 }); // Compound index for common filter combinations
+
 const Company = mongoose.model('Company', CompanySchema);
 module.exports = Company;

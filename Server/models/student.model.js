@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const userSchema = new mongoose.Schema({
+const studentSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'Name is required'],
@@ -33,9 +33,10 @@ const userSchema = new mongoose.Schema({
     trim: true,
     uppercase: true,
     match: [
-      /^[A-Z]{2}\d{2}[A-Z]{2}\d{3}$/,
-      'Please enter a valid USN (e.g., AB12CD345)'
-    ]
+  /^[A-Z0-9]{1}[A-Z]{2}\d{2}[A-Z]{2}\d{3}$/,
+  'Please enter a valid USN (e.g., 4VZ22CS001)'
+]
+
   },
   course :{
     type: String,
@@ -49,10 +50,21 @@ const userSchema = new mongoose.Schema({
     min: [1, 'Semester cannot be less than 1'],
     max: [8, 'Semester cannot be more than 8']
   },
+  branch: {
+    type: String, // Add branch field
+    required: [true, 'Branch is required'],
+    trim: true
+  },
   role: {
     type: String,
     default: 'student'
   }
 });
 
-module.exports = mongoose.model('Student', userSchema);
+// Add indexes for better query performance
+studentSchema.index({ sem: 1 });
+studentSchema.index({ course: 1 });
+studentSchema.index({ sem: 1, course: 1 }); // Compound index for common filter combinations
+studentSchema.index({ branch: 1 });
+
+module.exports = mongoose.model('Student', studentSchema);

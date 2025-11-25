@@ -1,9 +1,12 @@
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-dotenv.config();    
-const mongoURI = process.env.MONGO_URI;
 
 const connectDB = async () => {
+    const mongoURI = process.env.MONGO_URI;
+    if (!mongoURI) {
+        console.error('MONGODB_URI environment variable is not defined');
+        process.exit(1);
+    }
+
     try {
         await mongoose.connect(mongoURI, {
             useNewUrlParser: true,

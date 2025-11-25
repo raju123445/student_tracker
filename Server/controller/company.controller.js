@@ -3,30 +3,79 @@ const Company = require("../models/company.model.js");
 // --------------------------------------------
 // Create Company
 // --------------------------------------------
+// const createCompany = async (req, res) => {
+//   try {
+//     const company = await Company.create(req.body);
+
+//     res.status(201).json({
+//       success: true,
+//       message: "Company added successfully",
+//       data: company,
+//     });
+//   } catch (err) {
+//     res.status(500).json({ success: false, message: err.message });
+//   }
+// };
 const createCompany = async (req, res) => {
   try {
-    const company = await Company.create(req.body);
+    let companies;
+
+    // If array → bulk insert
+    if (Array.isArray(req.body)) {
+      companies = await Company.insertMany(req.body);
+    } 
+    else {
+      // Single insert
+      companies = await Company.create(req.body);
+    }
 
     res.status(201).json({
       success: true,
-      message: "Company added successfully",
-      data: company,
+      message: "Company data added successfully",
+      data: companies,
     });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
 };
 
+
 // --------------------------------------------
-// Get All Companies
+// Get All Companies (with filters)
 // --------------------------------------------
 const getCompanies = async (req, res) => {
   try {
-    const companies = await Company.find().sort({ companyName: 1 });
+    const query = {};
+
+    // Apply filters from query parameters
+    if (req.query.jobType) {
+      query.jobType = req.query.jobType;
+    }
+
+    if (req.query.location) {
+      query.location = req.query.location;
+    }
+
+    if (req.query.companyName) {
+      query.companyName = new RegExp(req.query.companyName, 'i'); // Case-insensitive search
+    }
+
+    // Pagination
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 100;
+    const skip = (page - 1) * limit;
+
+    const companies = await Company.find(query).sort({ companyName: 1 }).limit(limit).skip(skip);
+
+    // Count total documents for pagination info
+    const total = await Company.countDocuments(query);
 
     res.status(200).json({
       success: true,
       count: companies.length,
+      total,
+      page,
+      pages: Math.ceil(total / limit),
       data: companies,
     });
   } catch (err) {

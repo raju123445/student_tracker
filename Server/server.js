@@ -28,7 +28,7 @@ app.use(express.json({ limit: "20mb" }));
 app.use(express.urlencoded({ extended: true, limit: "20mb" }));
 app.use(cookieParser());
 app.use(cors({
-  origin: process.env.CLIENT_URL || "*",
+  origin: process.env.CLIENT_URL || "http://localhost:5173", // Vite default port
   credentials: true
 }));
 
