@@ -1,6 +1,7 @@
 import { Eye, EyeOff, Lock, Mail, Moon, Sun } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { loginAdmin } from "../api/api";
 
 export default function Login() {
   const [isDark, setIsDark] = useState(true);
@@ -11,61 +12,46 @@ export default function Login() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // Prefer Vite-style env var for API base URL. Vite only exposes vars prefixed with VITE_.
-  // If you set `FRONTEND_URL` in a .env file it will NOT be available in the browser.
-  // Use a Client/.env (Vite) file with: VITE_API_URL=http://localhost:5000
-  const API_BASE = import.meta.env.VITE_API_URL || 'https://student-tracker-lgfk.onrender.com';
   const navigate = useNavigate();
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setErrorMessage("");
     setIsLoading(true);
-    // use current state values directly
-    console.log("Login attempt:", { email, password, rememberMe });
-    // Helpful logs for debugging environment issues
-    console.log("Using API base URL:", API_BASE);
-    const loginUrl = (() => {
-      try {
-        // ensures correct concatenation even when API_BASE includes a trailing slash
-        return new URL('/api/admin/login', API_BASE).toString();
-      } catch (err) {
-        console.warn('Could not build login URL with URL(), falling back to string concat', err?.message);
-        return `${API_BASE.replace(/\/$/, '')}/api/admin/login`;
-      }
-    })();
-    console.log("Full login URL:", loginUrl);
+
     if (!email || !password) {
-      alert("Please enter both email and password.");
+      setErrorMessage("Please enter both email and password.");
       setIsLoading(false);
       return;
     }
 
-    // try block
-    try{
-      const response = await fetch(loginUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-      console.log("Response status:", response);
-
-      if (response.ok) { // Check for status 200-299
-        const data = await response.json();
+    try {
+      const response = await loginAdmin({ email, password });
+      
+      if (response.data.success) {
         // Store token and admin info
-        localStorage.setItem('authToken', data.token);
-        localStorage.setItem('admin', JSON.stringify(data.admin || {}));
+        localStorage.setItem('authToken', response.data.token);
+        localStorage.setItem('admin', JSON.stringify(response.data.admin || {}));
         // Navigate to dashboard using react-router
         navigate('/dashboard');
-        } else {
-        const errorData = await response.json();
-        setErrorMessage(errorData.message || 'Login failed. Please try again.');
+      } else {
+        setErrorMessage(response.data.message || 'Login failed. Please try again.');
       }
-    }
-    catch(error){
+    } catch (error) {
       console.error("Login error:", error);
-      alert("An error occurred during login. Please try again.");
-    } 
-    finally {
-      setIsLoading(false); // Reset loading state
+      
+      // Handle different types of errors
+      if (error.code === 'ERR_NETWORK' || error.message === 'Network Error' || error.message === 'Failed to fetch') {
+        setErrorMessage('Cannot connect to server. Please make sure the backend is running on http://localhost:5000');
+      } else if (error.response) {
+        // Server responded with an error status
+        setErrorMessage(error.response.data?.message || error.response.data?.error || 'Login failed. Please check your credentials.');
+      } else {
+        // Other errors
+        setErrorMessage('An unexpected error occurred. Please try again.');
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -231,13 +217,30 @@ export default function Login() {
           {/* Error Message */}
           {errorMessage && (
             <div
-              className={`p-3 rounded-lg text-sm ${
+              className={`p-4 rounded-lg text-sm ${
                 isDark
                   ? "bg-red-500/10 text-red-400 border border-red-500/20"
                   : "bg-red-50 text-red-600 border border-red-200"
               }`}
             >
-              {errorMessage}
+              <div className="flex items-start gap-2">
+                <svg className="w-5 h-5 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div className="flex-1">
+                  <p className="font-medium mb-1">{errorMessage}</p>
+                  {errorMessage.includes('Cannot connect to server') && (
+                    <div className="text-xs mt-2 opacity-90">
+                      <p className="mb-1">To fix this:</p>
+                      <ol className="list-decimal list-inside space-y-0.5 ml-2">
+                        <li>Navigate to the <code className="px-1 py-0.5 rounded bg-red-500/20">Server</code> directory</li>
+                        <li>Run <code className="px-1 py-0.5 rounded bg-red-500/20">npm start</code> to start the backend</li>
+                        <li>Ensure MongoDB is running and accessible</li>
+                      </ol>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           )}
 

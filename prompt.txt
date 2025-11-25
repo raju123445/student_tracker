@@ -1,0 +1,127 @@
+You are an expert full-stack engineer. I am giving you a complete full-stack MERN project with the following folder structure:
+
+Client/
+  public/
+  src/
+    api/api.js
+    assets/
+    components/
+      Card.jsx
+      ApplicationsTable.jsx
+      CompanySelectionChart.jsx
+      CompanyTable.jsx
+      FiltersBar.jsx
+      StatusDistributionChart.jsx
+      StudentTable.jsx
+      Table.jsx
+      USNSearch.jsx
+    hooks/
+      useDebounce.js
+      useFetch.js
+      usePagination.js
+    pages/
+      DashboardPage.jsx
+      Login.jsx
+      StudentTrackingPage.jsx
+    store/useStore.js
+    utils/format.js
+    App.jsx
+    main.jsx
+
+Server/
+  config/db.js
+  controller/
+      admin.controller.js
+      application.controller.js
+      company.controller.js
+      student.controller.js
+  middleware/
+  models/
+      admin.model.js
+      applications.model.js
+      company.model.js
+      student.model.js
+  routes/
+      admin.route.js
+      application.route.js
+      company.route.js
+      student.route.js
+  server.js
+
+Current Problem:
+— Copilot generated only the UI.  
+— No API calls are implemented.  
+— Dashboard is not reading any real data from MongoDB.  
+— Filters (company, status, sem, course, job type, recruitment month) are not connected.  
+— Company-wise selections chart shows empty.  
+— Status distribution chart is empty.  
+— Student tracking page is not fetching data by USN.  
+— Backend routes are correct but not used in the frontend.  
+— Need complete integration and corrections in both Client & Server.
+
+Your job:
+Analyze and fully understand this MERN project structure, including:
+  - React components
+  - Zustand store
+  - Custom hooks (useFetch, pagination, debounce)
+  - Backend models, controllers, and routes
+  - All API endpoints
+
+Then produce the following improvements:
+
+1. Fix and improve the entire project (frontend + backend) for full functionality.
+
+2. Connect all dashboard UI components to the backend:
+   - Total Students
+   - Total Companies
+   - Total Applications
+   - Total Selected
+   - Company-wise selection chart
+   - Status distribution chart
+   - Complete filter bar (company, status, sem, course, job type, recruitment date)
+   - Apply + Reset filters.
+
+3. Fix and complete API integration inside:
+   src/api/api.js  
+   src/hooks/useFetch.js  
+   src/store/useStore.js  
+   All components that require data.
+
+4. Implement the full USN tracking system:
+   - Search by USN
+   - Fetch student details by USN
+   - Fetch all applications of that student
+   - Show status, company, rounds, remarks, final result
+   - Timeline UI for rounds (if possible)
+
+5. Clean and improve UI with Tailwind:
+   - Better spacing, grid, layout, cards, tables
+   - Make charts responsive
+   - Improve Filter Bar UI
+   - Add loading states, empty states, error states
+
+6. Improve backend if needed:
+   - Add endpoints like /students/usn/:usn
+   - Add aggregated endpoints for dashboard analytics
+   - Optimize controllers for bulk operations
+   - Add pagination support
+
+7. Generate:
+   - Corrected React components
+   - Corrected API functions
+   - Updated hooks
+   - Updated pages
+   - Updated backend controllers & routes
+   - Any missing utility files
+   - Documentation on how everything connects
+
+8. Ensure the app is scalable for thousands of records.
+
+Important:
+
+Only output code and explanations needed to complete and fix the entire project.
+
+Goal:
+When your output is implemented, the entire dashboard must work end-to-end with real backend data, including filtering, charts, USN tracking, tables, pagination, and analytics.
+
+Start now. Understand everything and then generate the full corrected project code.
