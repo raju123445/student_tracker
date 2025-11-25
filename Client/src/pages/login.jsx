@@ -14,7 +14,7 @@ export default function Login() {
   // Prefer Vite-style env var for API base URL. Vite only exposes vars prefixed with VITE_.
   // If you set `FRONTEND_URL` in a .env file it will NOT be available in the browser.
   // Use a Client/.env (Vite) file with: VITE_API_URL=http://localhost:5000
-  const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+  const API_BASE = import.meta.env.VITE_API_URL || 'https://student-tracker-lgfk.onrender.com';
   const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
