@@ -11,14 +11,28 @@ export default function Login() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // Prefer Vite-style env var for API base URL; fallback to localhost:5000
-  const API_BASE = import.meta.env.VITE_API_URL || import.meta.env.FRONTEND_URL || 'http://localhost:5000';
+  // Prefer Vite-style env var for API base URL. Vite only exposes vars prefixed with VITE_.
+  // If you set `FRONTEND_URL` in a .env file it will NOT be available in the browser.
+  // Use a Client/.env (Vite) file with: VITE_API_URL=http://localhost:5000
+  const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
   const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
     // use current state values directly
     console.log("Login attempt:", { email, password, rememberMe });
+    // Helpful logs for debugging environment issues
+    console.log("Using API base URL:", API_BASE);
+    const loginUrl = (() => {
+      try {
+        // ensures correct concatenation even when API_BASE includes a trailing slash
+        return new URL('/api/admin/login', API_BASE).toString();
+      } catch (err) {
+        console.warn('Could not build login URL with URL(), falling back to string concat', err?.message);
+        return `${API_BASE.replace(/\/$/, '')}/api/admin/login`;
+      }
+    })();
+    console.log("Full login URL:", loginUrl);
     if (!email || !password) {
       alert("Please enter both email and password.");
       setIsLoading(false);
@@ -27,7 +41,7 @@ export default function Login() {
 
     // try block
     try{
-      const response = await fetch(`${API_BASE}/api/admin/login`, {
+      const response = await fetch(loginUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
