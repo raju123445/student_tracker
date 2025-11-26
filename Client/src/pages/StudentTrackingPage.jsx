@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import { fetchStudentByUSN, fetchApplications } from '../api/api';
-import USNSearch from '../components/USNSearch';
-import Card from '../components/Card';
+import { useState } from 'react';
+import { fetchApplications, fetchStudentByUSN } from '../api/api';
 import ApplicationsTable from '../components/ApplicationsTable';
+import Card from '../components/Card';
+import USNSearch from '../components/USNSearch';
 
 export default function StudentTrackingPage() {
   const [student, setStudent] = useState(null);
@@ -57,13 +57,13 @@ export default function StudentTrackingPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           <Card title="Student Profile" className="lg:col-span-1">
             <div className="text-sm space-y-2">
-              <div><strong>USN:</strong> {student.usn}</div>
-              <div><strong>Name:</strong> {student.name}</div>
-              <div><strong>Email:</strong> {student.email}</div>
-              <div><strong>Mobile:</strong> {student.mobileNumber}</div>
-              <div><strong>Course:</strong> {student.course}</div>
-              <div><strong>Sem:</strong> {student.sem}</div>
-              <div><strong>Branch:</strong> {student.branch}</div>
+              <div className='text-amber-50'><strong>USN:</strong> {student.usn}</div>
+              <div className='text-amber-50'><strong>Name:</strong> {student.name}</div>
+              <div className='text-amber-50'><strong>Email:</strong> {student.email}</div>
+              <div className='text-amber-50'><strong>Mobile:</strong> {student.mobileNumber}</div>
+              <div className='text-amber-50'><strong>Course:</strong> {student.course}</div>
+              <div className='text-amber-50'><strong>Sem:</strong> {student.sem}</div>
+              <div className='text-amber-50'><strong>Branch:</strong> {student.branch}</div>
             </div>
           </Card>
 

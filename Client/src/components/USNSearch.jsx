@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { fetchStudentByUSN } from '../api/api';
 
 export default function USNSearch({ onSearch }) {
   const [usn, setUsn] = useState('');
@@ -29,7 +28,7 @@ export default function USNSearch({ onSearch }) {
         value={usn}
         onChange={(e) => setUsn(e.target.value.toUpperCase())}
         placeholder="Enter USN e.g. 4VZ22CS013"
-        className="border rounded px-3 py-2 flex-1 bg-white dark:bg-gray-700"
+        className="border rounded px-3 py-2 flex-1 bg-white dark:bg-gray-700 text-amber-50"
       />
       <button
         type="submit"
