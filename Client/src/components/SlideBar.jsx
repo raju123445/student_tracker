@@ -21,7 +21,7 @@ const Sidebar = () => {
     {
       name: "Course Search",
       icon: <BookOpen size={20} />,
-      link: "/course-search",
+      link: "/course-students",
     },
 
     // --- You can add more items ---
