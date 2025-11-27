@@ -9,7 +9,8 @@ const {
   deleteStudent,
   getDashboardStats,
   getCompanySelections,
-  getStatusDistribution
+  getStatusDistribution,
+  bulkUpdateStudents
 } = require( "../controller/student.controller.js");
 
 const router = express.Router();
@@ -45,6 +46,9 @@ router.get("/:id", getStudentById);
 // @route   PUT /api/students/:id
 // @desc    Update student
 router.put("/:id", updateStudent);
+
+router.put("/b-update", bulkUpdateStudents);
+
 
 // @route   DELETE /api/students/:id
 // @desc    Delete student

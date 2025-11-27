@@ -37,7 +37,7 @@ export default function StudentTrackingPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold">Student Tracking</h1>
+      <h1 className="text-amber-50 font-bold">Student Tracking</h1>
 
       <USNSearch onSearch={searchStudent} />
 

@@ -21,9 +21,8 @@ const studentSchema = new mongoose.Schema({
   mobileNumber: {
     type: String,
     required: true,
-    unique: true, // Ensures no two users have the same mobile number
-    trim: true, // Removes whitespace from both ends of the string
-    // You can add a regex for validation if needed
+    unique: true,
+    trim: true, 
     match: [/^(\+\d{1,3}[- ]?)?\d{10}$/, 'Please fill a valid mobile number']
   },
   usn:{

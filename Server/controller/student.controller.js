@@ -134,6 +134,38 @@ const updateStudent = async (req, res) => {
 };
 
 
+// Bulk_update
+
+const bulkUpdateStudents = async (req, res) => {
+  try {
+    // req.body must contain the fields you want to update
+    const updateFields = req.body;
+
+    if (!updateFields || Object.keys(updateFields).length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "No update fields provided",
+      });
+    }
+
+    const result = await Student.updateMany({}, { $set: updateFields });
+
+    res.status(200).json({
+      success: true,
+      message: "Bulk update completed successfully",
+      matched: result.matchedCount,
+      modified: result.modifiedCount,
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
 // Delete Student
 
 const deleteStudent = async (req, res) => {
@@ -467,5 +499,6 @@ module.exports = {
   deleteStudent,
   getDashboardStats,  // Add this export
   getCompanySelections,  // Add these exports
-  getStatusDistribution  // Add this export
+  getStatusDistribution , // Add this export
+  bulkUpdateStudents
 };
