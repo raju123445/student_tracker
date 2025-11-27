@@ -272,12 +272,23 @@ const CourseWiseApplications = () => {
                   </tr>
                 ));
               })}
+              <div className="flex justify-end mt-4">
+  <button
+    onClick={() => window.print()}
+    className="bg-blue-600 px-4 py-2 rounded-md text-white hover:bg-blue-700"
+  >
+    Print
+  </button>
+</div>
+
             </tbody>
           </table>
         )}
       </div>
     </div>
+    
   );
+  
 };
 
 export default CourseWiseApplications
